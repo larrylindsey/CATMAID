@@ -1138,7 +1138,7 @@ var WindowMaker = new function()
 
     addLogic(win);
 
-    OntologyEditor.init( project.getId() );
+    OntologyEditor.init();
 
     return win;
   };
