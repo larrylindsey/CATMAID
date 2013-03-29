@@ -2,7 +2,7 @@ from django.conf.urls.defaults import patterns, include, url
 from django.conf import settings
 from django.views.generic import TemplateView
 
-from catmaid.views import HomepageView
+from catmaid.views import HomepageView, SegmentDecisionView
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -18,7 +18,14 @@ intlist = r'[0-9]+(,[0-9]+)*'
 
 # Add the main index.html page at the root:
 urlpatterns = patterns('',
-    (r'^$', HomepageView.as_view()))
+    (r'^$', HomepageView.as_view()),
+    (r'^segmentdecision', SegmentDecisionView.as_view()),
+    (r'^segment/image$', 'catmaid.control.get_segment_image'),
+)
+
+# urlpatterns += patterns('',
+
+# )
 
 # Neuron Catalog
 urlpatterns += patterns('',
@@ -72,6 +79,7 @@ urlpatterns += patterns(
     
     (r'^(?P<project_id>\d+)/stack/(?P<stack_id>\d+)/slices-at-location$', 'catmaid.control.slices_at_location'),
     (r'^(?P<project_id>\d+)/stack/(?P<stack_id>\d+)/slice$', 'catmaid.control.get_slice'),
+    (r'^(?P<project_id>\d+)/stack/(?P<stack_id>\d+)/slice/image$', 'catmaid.control.get_sliceimage'),
     (r'^(?P<project_id>\d+)/stack/(?P<stack_id>\d+)/slice/delete-slice-from-assembly$', 'catmaid.control.delete_slice_from_assembly'),
     (r'^(?P<project_id>\d+)/stack/(?P<stack_id>\d+)/slice/contour$', 'catmaid.control.slice_contour'),
     (r'^(?P<project_id>\d+)/stack/(?P<stack_id>\d+)/slice/contour-highres$', 'catmaid.control.slice_contour_highres'),
