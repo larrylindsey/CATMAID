@@ -2,7 +2,8 @@ from django.conf.urls.defaults import patterns, include, url
 from django.conf import settings
 from django.views.generic import TemplateView
 
-from catmaid.views import HomepageView, SegmentDecisionView
+from catmaid.views import HomepageView
+from neurocity.views import SegmentDecisionView
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -20,7 +21,8 @@ intlist = r'[0-9]+(,[0-9]+)*'
 urlpatterns = patterns('',
     (r'^$', HomepageView.as_view()),
     (r'^segmentdecision', SegmentDecisionView.as_view()),
-    (r'^segment/image$', 'catmaid.control.get_segment_image'),
+    (r'^segment/image$', 'neurocity.control.segment.get_segment_image'),
+    (r'^accounts/', include('allauth.urls')),
 )
 
 # urlpatterns += patterns('',
@@ -48,7 +50,6 @@ urlpatterns += patterns('',
 urlpatterns += patterns(
     '',
     
-    (r'^login$', 'catmaid.control.login_vnc'),
     (r'^accounts/login$', 'catmaid.control.login_user'),
     (r'^accounts/logout$', 'catmaid.control.logout_user'),
     (r'^accounts/(?P<project_id>\d+)/all-usernames$', 'catmaid.control.all_usernames'),
