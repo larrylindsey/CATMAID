@@ -66,7 +66,7 @@ this with::
                          libboost-python1.48-dev uuid-dev \
                          libxml2-dev libxslt1-dev libjpeg-dev \
                          libtiff-dev virtualenvwrapper \
-                         libblas-dev liblapack-dev
+                         libblas-dev liblapack-dev libgeos-c1
 
 Virtual Env Wrapper needs to source your environment. Start a new terminal
 or if you are using the bash::
