@@ -400,8 +400,8 @@ var VolumeTracingPalette = new function()
         });
         $('#trace_add_dialog #trace_add').off("click").on("click",
         function(){
-            console.log("add clicked");
-            console.log(n);
+            //console.log("add clicked");
+            //console.log(n);
             var parentClass = n.obj[0].getAttribute('name');
             var traceName = $('#trace_add_dialog #tracename').val();
             
@@ -426,7 +426,7 @@ var VolumeTracingPalette = new function()
     
     this.refresh = function()
     {
-        console.log('fresh!');
+        //console.log('fresh!');
         $("#area_segment_tree").jstree("refresh", -1);
     }
 
@@ -437,7 +437,7 @@ var VolumeTracingPalette = new function()
         {
             if (sig == CMWWindow.CLOSE)
             {
-                console.log("Closed window")
+                //console.log("Closed window")
                 window = null;
             }
         });
