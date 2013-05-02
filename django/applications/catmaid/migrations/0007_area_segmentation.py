@@ -52,6 +52,11 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('catmaid', ['AreaSegment'])
 
+        # Adding field 'UserProfile.show_area_segment_tool'
+        db.add_column('catmaid_userprofile', 'show_area_segment_tool',
+                      self.gf('django.db.models.fields.BooleanField')(default=False),
+                      keep_default=False)
+
 
     def backwards(self, orm):
         # Deleting model 'InnerPolygonPath'
@@ -62,6 +67,9 @@ class Migration(SchemaMigration):
 
         # Deleting model 'AreaSegment'
         db.delete_table('catmaid_areasegment')
+
+        # Deleting field 'UserProfile.show_area_segment_tool'
+        db.delete_column('catmaid_userprofile', 'show_area_segment_tool')
 
 
     models = {
@@ -584,6 +592,7 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'UserProfile'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'inverse_mouse_wheel': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'show_area_segment_tool': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'show_cropping_tool': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'show_ontology_tool': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'show_segmentation_tool': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),

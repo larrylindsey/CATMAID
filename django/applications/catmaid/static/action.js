@@ -260,7 +260,7 @@ var createEditToolActions = function() {
   }
 
 
-if (userprofile.show_text_label_tool) {
+if (userprofile.show_area_segment_tool) {
   editToolActions.push(
     new Action({
 	  helpText: "Manual Volume Tracing",
