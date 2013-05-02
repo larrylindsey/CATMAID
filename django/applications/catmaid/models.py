@@ -845,6 +845,8 @@ class UserProfile(models.Model):
         default=settings.PROFILE_SHOW_TRACING_TOOL)
     show_ontology_tool = models.BooleanField(
         default=settings.PROFILE_SHOW_ONTOLOGY_TOOL)
+    show_area_segment_tool = models.BooleanField(
+        default=settings.PROFILE_SHOW_AREA_SEGMENT_TOOL)
 
     def __unicode__(self):
         return self.user.username
@@ -862,6 +864,7 @@ class UserProfile(models.Model):
         pdict['show_segmentation_tool'] = self.show_segmentation_tool
         pdict['show_tracing_tool'] = self.show_tracing_tool
         pdict['show_ontology_tool'] = self.show_ontology_tool
+        pdict['show_area_segment_tool'] = self.show_area_segment_tool
         return pdict
     
     # Fix a problem with duplicate keys when new users are added.
