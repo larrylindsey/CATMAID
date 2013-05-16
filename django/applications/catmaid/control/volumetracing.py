@@ -634,6 +634,11 @@ def instance_png(request, project_id=None, instance_id=None):
     im.save(response, 'png')
     return response
     
+def count_volume_classes(request, project_id=None):
+    class_classes = ClassClass.objects.filter(class_b__class_name = 'traceable_root',
+                                  relation__relation_name = 'is_a', project = p)
+    return HttpResponse(json.dumps(
+        {'count' : len(class_classes)}))
 
 def volume_classes(request, project_id=None):
     parentId = int(request.GET.get('parentid'))
@@ -643,7 +648,7 @@ def volume_classes(request, project_id=None):
     if parentId <= -1:
         #classes = Class.objects.filter(project = p)
         class_classes = ClassClass.objects.filter(class_b__class_name = 'traceable_root',
-                                  relation__relation_name = 'is_a')
+                                  relation__relation_name = 'is_a', project = p)
         return HttpResponse(json.dumps(
             tuple({'data' : {'title' : '<IMG SRC="static/widgets/themes/kde/jsTree/volumesegment/class.png">' + c.class_name},
                    'state' : 'closed',
@@ -678,3 +683,25 @@ def create_new_trace(request, project_id=None):
     ci.save()
     return HttpResponse(json.dumps({'message' : 'ok'}))
                        
+@requires_user_role([UserRole.Annotate, UserRole.Browse])
+def create_traceable_class(request, project_id=None):    
+    cname = request.POST.get('class_name')
+    num_c = Class.objects.filter(project_id = project_id,
+            class_name = cname).count()
+    if num_c == 0:
+        c = Class.objects.create(user=request.user,
+            project_id = project_id, class_name = cname,
+            description = 'Default Area Segment Type')
+        c.save()
+        root_c = Class.objects.get(class_name = 'traceable_root')
+        is_a = Relation.objects.get(relation_name = 'is_a')
+        cc = ClassClass.objects.create(user = request.user,
+            project_id = project_id, relation = is_a,
+            class_a = c, class_b = root_c)
+        cc.save()
+        return HttpResponse(json.dumps({'message' : 'ok'}))
+    else:
+        return HttpResponse(json.dumps({'message' : 'fail'}))
+    
+    
+    

@@ -109,6 +109,8 @@ urlpatterns += patterns(
     (r'^(?P<project_id>\d+)/volumetrace/settraceproperties$', 'catmaid.control.set_trace_properties'),
     (r'^(?P<project_id>\d+)/volumetrace/create$', 'catmaid.control.create_new_trace'),
     (r'^(?P<project_id>\d+)/volumetrace/(?P<instance_id>\d+)/instance.png$', 'catmaid.control.instance_png'),
+    (r'^(?P<project_id>\d+)/volumetrace/createclass$', 'catmaid.control.create_traceable_class'),
+    (r'^(?P<project_id>\d+)/volumetrace/countclasses$', 'catmaid.control.count_volume_classes'),
         
     # ------
 
