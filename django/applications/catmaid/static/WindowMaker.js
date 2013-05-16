@@ -1228,12 +1228,15 @@ var WindowMaker = new function()
       var container = createContainer( "area_segment_widget" );
       content.appendChild( container );
       
-      container.innerHTML = 
+      container.innerHTML =         
         '<div id="toolbar_volseg" class="toolbar" style="display:none;">' +
         '<div id="volseg_radius_box"></div>' +
         '<div class="toolbar_fill"></div>' +
         '</div>' +
         '<div id="area_segment_tree"></div>'+
+        '<div id="add_traceclass_button" style="display:block; cursor:default">' +
+        '  <p><input type="button" id="add_traceclass_button" value="Create New Traceable Class..."/></p>' +
+        '</div>' +
         '<div id="area_segment_view_properties">'+
         '<div id="area_segment_view_caption">Display Properties</div>'+        
         '<div id="area_segment_colorwheel"></div>'+
@@ -1245,7 +1248,14 @@ var WindowMaker = new function()
         '<div id="trace_add_dialog" style="display:none; cursor:default">' +
         '<div id="input_trace_object"><p>New object name: <input type="text" id="tracename" /></p></div>' +
         '<p><input type="button" id="trace_cancel" value="Cancel" />' +
-        '<input type="button" id="trace_add" value="Add" /></p></div>';
+        '<input type="button" id="trace_add" value="Add" /></p></div>' +
+        '<div id="traceclass_add_dialog" style="display:none; cursor:default">' +
+        '  <div id="input_trace_class">' +
+        '    <p>New class name: <input type="text" id="traceclassname" /></p>' +
+        '  </div>' + 
+        '  <p><input type="button" id="traceclass_cancel" value="Cancel" />' +
+        '  <input type="button" id="traceclass_add" value="Add" /></p>' +
+        '</div>';
       addListener(win, container);
         
       addLogic(win);

@@ -267,7 +267,23 @@ var VolumeTracingPalette = new function()
         //Change back-end attribute on mouse-up
         self.colorwheel.ondrag(function(){}, 
             self.syncColorAndUpdate);
+                    
+        //Bind create traceable class button
+        $("#add_traceclass_button").off("click").on("click", self.create_new_class);
         
+        /*
+         * jstree shenanigans
+         * 
+         * This jstree will list as trunks all classes in the ontology that have an is_a
+         * relationship with the traceable_root class. When clicked, all ClassInstances belonging to
+         * the given class will be displayed, with a png generated on-the-fly to represent the color
+         * of the instance.
+         * 
+         * When an instance is selected, a colorwheel and opacity slider will appear. Dragging the 
+         * colorwheel controls updates the display in real time, but only updates the database on 
+         * mouseup (colorwheel calls this mousedrag, for some reason). The opacity slider updates
+         * both the display and the database in realtime.
+        */
         tree.jstree({
           "core": {
             "html_titles": true
@@ -383,6 +399,41 @@ var VolumeTracingPalette = new function()
         });
 
     }
+    
+    
+    /**
+     * Create a new traceable_root Class
+     */
+    this.create_new_class = function()
+    {
+        $('#traceclass_add_dialog #traceclass_cancel').off("click").on("click",
+        function() {
+            // clear input box
+            $('#traceclass_add_dialog #traceclassname').val("");
+            $.unblockUI();
+            return false;
+        });
+        $('#traceclass_add_dialog #traceclass_add').off("click").on("click",
+        function(){            
+            var className = $('#traceclass_add_dialog #traceclassname').val();
+            
+            $.ajax({
+                "dataType": 'json',
+                "type": "POST",
+                  "cache": false,
+                  "url": django_url + project.id + '/volumetrace/createclass',
+                  "data": {'class_name' : className},
+                  "success": VolumeTracingPalette.refresh
+            });
+            
+            $('#traceclass_add_dialog #traceclassname').val("");
+            $.unblockUI();
+            return false;
+        });
+        
+        $.blockUI({ message: $('#traceclass_add_dialog') });
+    }
+    
     
     /**
      * Create a new traceable_root ClassInstance
