@@ -4,17 +4,17 @@ Instructions for Area Tracing
 Using the Area Tracing Tool
 ---------------------------
 
-If area tracing is enabled for your user, the following icon should
+If area tracing is enabled for your user, the following icon will
 appear on the main CATMAID toolbar
 
 .. image :: _static/areatracing/tools-icons-polygon.png
 
-The area tracing tool window should appear
+Click it to open the area tracing window.
 
 .. image :: _static/areatracing/tracing-window-open.png
 
 Navigation works as in the neuron tracing tool, except that left-drag
-has been replaced. Instead, middle-drag to pan.
+has been replaced. Instead, use middle-drag to pan.
 
 * Middle-click and drag with the mouse to pan around the dataset, as in
   Google maps
@@ -59,9 +59,9 @@ All polygon operations require Project, Stack, User, and ClassInstance
 objects from django. Coordinates are in pixels. Polygon operations are
 performed through the shapely dependency. Consult the
 `Shapely User Manual <http://toblerity.github.io/shapely/manual.html#polygons>`_
-on how to operate on polygons. 
+for polygon operations. 
 
-Area trace information is stored as an AreaSegment object.
+Area trace information is stored as an AreaSegment object, defined in models.py
 
 Potentially Useful Functions
 ````````````````````````````
@@ -79,6 +79,30 @@ push_shapely_polygon(polygon, z, project, stack, instance, user, check_ovlp=True
 * user - User
 * check_ovlp - if True, checks for any overlapping polygons belonging to the same ClassInstance. If there are any, they will be merged.
 
+To create an AreaSegment class using the constructor
+````````````````````````````````````````````````````
+
+I recommend using push_shapely_polygon instead, because it handles much of the
+overhead needed to properly construct an AreaSegment for the database, however,
+if you find that you need to construct an AreaSegment by hand, here is how.
+
+AreaSegment inherits from UserFocusedModel, and has the following additional
+non-default parameters.
+
+* stack - the Stack that this AreaSegment belongs to
+* class_instance - the ClassInstance that this AreaSegment belongs to
+* z = z - the z-coordinate for this trace
+* min_x - x lower-bound. The bounding box is used to improve performance when finding polygons by location.
+* min_y - y lower-bound
+* max_x - x upper-bound
+* max_y - y upper-bound
+* type - 0 if in use, 1 if not. Polygon deletion is done by setting this field to 1.
+* coordinates - a 1 x 2 * n array. The first half contains x-coordinates, the second y-coordinates.
+* ndim = 2 - number of dimensions in the point array. Currently always 2, may be removed in future versions.
+* vpid = 0 - the unique id corresponding to the ViewProperties instance associated with this AreaSegment. 0 indicates that this field is uninstantiated.
+* inner_paths = [] - an integer array containing the unique id's for InnerPolygonPaths that represent holes in the AreaSegment
+
+
 
 To change the polygon associated with an AreaSegment
 ````````````````````````````````````````````````````
@@ -87,7 +111,7 @@ change_polygon(aseg, polygon, save=True)
 
 * aseg - the AreaSegment to change
 * polygon - the shapely polygon representing the new shape
-* save - if True, saves the AreaSegment to the database after changing it. If False, you must save it manually.
+* save - if True, saves the AreaSegment to the database after changing it. If False, you must save it manually for changes to take effect.
 
 To obtain a shapely polygon from an AreaSegment
 ```````````````````````````````````````````````
